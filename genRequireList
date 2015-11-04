@@ -1,0 +1,31 @@
+#!/bin/bash
+# Volodymyr P Sergiievskyi
+
+if [ $# -lt 2 ]; then
+ woExt=$(echo $1 | sed 's/\([^.]*\).\(.*\)/\1/g')
+
+ echo $woExt > visited.txt
+ echo "#include \""$1"\""  
+ rm -f dependencies.txt
+touch dependencies.txt
+# echo "" > dependencies.txt
+fi
+
+echo $1 >> dependencies.txt
+
+
+List=$(./extractIncludes $1)
+
+for i in $List 
+do
+	[ -n "$(cat visited.txt | grep "^$i$" )" ]&& continue;
+	echo $i >> visited.txt
+	
+	[ -f "$i.cpp" ]&& echo '#include "'$i'.cpp"';
+	[ -f "$i.c" ]&& echo '#include "'$i'.c"';
+
+	[ -f $i.h ]&& ./genRequireList $i'.h' DontDeleteVisited.Txt ;
+	[ -f $i.cpp ]&& ./genRequireList $i'.cpp' DontDeleteVisited.Txt;
+	[ -f $i.c ]&& ./genRequireList $i'.c' DontDeleteVisited.Txt;
+
+done

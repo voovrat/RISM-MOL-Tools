@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd fftw-3.3alpha1
+./configure
+make
+cp .libs/libfftw3.a ..
+cd ..

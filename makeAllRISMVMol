@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo getBestRotationsFast
+./makeBestRotationsFast
+
+echo createBindingMoleculesXYZ
+./myMake createBindingMoleculesXYZ.cpp
+echo 3DtoDX
+./myMake 3DtoDX.cpp

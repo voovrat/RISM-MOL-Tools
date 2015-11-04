@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [ $# -lt 5 ]; then
+
+echo "Usage: run3DRISM  solute.xyz solute.ff solvent.composition solvent.rdfs parameters.txt"
+exit
+
+fi
+
+soluteXYZ=$1
+soluteFF=$2
+solventComposition=$3
+solventRDFs=$4
+parameters=$5
+
+solvent=$( echo $solventComposition | gawk -F . '{print $1}' | gawk -F '/' '{print $NF}' )
+
+echo $solventComposition $solvent.rism
+
+assignSolventFF $solventComposition > $solvent.rism
+createSlv $solventComposition $solvent.rism > $solvent.slv
+createOmega $solventComposition > $solvent.omega
+
+solute=$( echo $soluteXYZ | gawk -F . '{print $1}' | gawk -F '/' '{print $NF}' )
+
+echo $soluteXYZ $solute.pat $solute.AT
+
+coors2pat $soluteXYZ > $solute.pat
+assignAtomTypes $solute.pat $soluteFF > $solute.AT
+echo assignAtomTypes $solute.pat $soluteFF '>' $solute.AT
+
+createRismInput $soluteXYZ $solute.AT $soluteFF > $solute.rism
+
+K="'"
+KK='"'
+SC=';'
+
+str="SoluteStructureFile=${KK}$solute.rism${KK}${SC}"
+str=$str"SolventDataFile=${KK}$solvent.slv${KK}$SC"
+str=$str"SolventRDFsFile=${KK}$solventRDFs${KK}$SC"
+str=$str"SolventOmegaFile=${KK}$solvent.omega${KK}$SC"
+
+eval multiGridMain $parameters ${K}$str${K}
+
+createDistributions ${solute}_in_${solvent}  $solventComposition
+
+
+

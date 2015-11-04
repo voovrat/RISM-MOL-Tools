@@ -1,0 +1,18 @@
+#!/bin/bash
+
+P=$(pwd)
+
+
+cd lapack/BLAS
+make
+cp blas_LINUX.a $P
+
+cd $P/lapack
+
+echo "BLASLIB = "$P/blas_LINUX.a >>  make.inc
+
+make 
+
+cd $P
+
+cp $P/lapack/lapack_LINUX.a .

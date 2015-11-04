@@ -1,0 +1,15 @@
+#!/bin/bash
+
+[ -f ~/.vmdrc ]|| echo > ~/.vmdrc;
+
+N=$( cat ~/.vmdrc | grep $(pwd) | wc -l )
+
+if [ $N == 0 ]; then
+
+
+echo menu main on >> ~/.vmdrc
+
+echo "set auto_path [linsert \$auto_path 0 $(pwd)  ]" >> ~/.vmdrc
+echo vmd_install_extension binding binding_tk \"RISM-MOL-Tools/binding\" >> ~/.vmdrc
+
+fi

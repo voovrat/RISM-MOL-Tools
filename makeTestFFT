@@ -1,0 +1,19 @@
+#!/bin/bash
+
+output=test_d3fft
+echo NArgs: $#
+echo 1stArg:[$1]
+[ $# -eq 1 ]&& output=$1;
+
+echo output=$output
+
+SP=$'\n'
+SP2="$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP"
+
+./genRequireList test_d3fft.cpp > test_d3fft_require.cpp
+echo "$SP2"
+
+cmd="g++ -g -o $output test_d3fft_require.cpp libfftw3.a -lm -lgfortran"
+echo $cmd
+eval $cmd
+

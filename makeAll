@@ -1,0 +1,11 @@
+#!/bin/bash
+
+./makeMultiGrid
+./makeFreeEnergySimple
+./makeAllFF
+./makeAllRISMVMol
+./myMake createSlv.cpp
+./myMake createOmega.cpp
+./myMake createDistributions.cpp
+./myMake centrateMolecule
+./makeCentralRDF

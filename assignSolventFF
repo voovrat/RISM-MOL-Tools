@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then 
+	echo "Usage: assignSolventFF solvent.composition  [output.rism] "
+ 	exit
+fi
+
+if [ $# -lt 2 ]; then
+	fout=/dev/stdout
+else
+   	fout=$2
+fi
+
+IFS=$'\n'
+for line in $(cat $1)
+do
+#	echo $line
+	file=$(echo $line | gawk '{print $1}' )
+	forcefield=$(echo $line | gawk '{print $2}')
+
+	mol=$(echo $file | tr . ' ' | gawk '{print $1}')
+
+	coors2pat $file > $mol.pat 
+	assignAtomTypes $mol.pat $forcefield > ${mol}AT.pat
+	createRismInput $file ${mol}AT.pat $forcefield >> $fout
+
+done
+
+
+

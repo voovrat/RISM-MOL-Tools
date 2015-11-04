@@ -1,0 +1,14 @@
+#!/bin/bash
+
+N=$(echo $PATH | grep $(pwd) | wc -l)
+echo $N
+if [ $N == 0 ]; then
+	 export PATH=$PATH:$(pwd) 
+fi
+
+S='export PATH=$PATH:'$(pwd)
+
+N=$(cat ~/.bashrc | grep "$S" | wc -l)
+if [ $N == 0 ]; then
+	 echo $S >> ~/.bashrc 
+fi

@@ -1,0 +1,11 @@
+#/bin/bash
+
+file=$1
+fileName=$(echo $file | sed 's/\([^.]*\).\([^.]*\)/\1/g')
+
+#echo $fileName
+
+for ((i=0;i<10;i++)); do echo ''; done
+
+./genRequireList $file > ${fileName}_require.cpp
+g++ -g -o $fileName ${fileName}_require.cpp 

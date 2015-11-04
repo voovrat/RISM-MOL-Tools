@@ -1,0 +1,17 @@
+Author: Volodymyr P. Sergiievskyi aka voov.rat  (mailto: voov.rat (at) gmail.com )
+
+This source file is distributed under the following licence:
+
+1) You have right to use the text of this file in any non-commercial purposes.
+
+2) You have right to modify the file and use the modified copy in any non-commercial purposes.
+In that case you must distribute the modified copy under the licence, which warrants not less rights than the current one.
+You must add the text of licence at the beggining of the modified file.
+You also must clearly indicate the changes which you made to the original version.
+
+3) If you use this file or parts of this file in you program, this program must be open-source. That means that this program must be distributed with its source code, and the program must be free to download for no-charge.
+
+4) If you use the parts of this file in your program, you must indicate this fact in the source code of your program (in the files, where you use the text of this file). You also must mention in your source code the author of this file.
+
+5) If you use in your work the output of the program which has this file or parts of this file in its source code, you must mention the author of this file and give a download link to the program. 
+

@@ -1,0 +1,18 @@
+sites 
+5 records
+  O  33.36 
+  H1 33.36
+  H2 33.36
+  Na 0.05
+  Cl 0.05
+end sites
+
+distances
+3 records
+  O  H1 1
+  O  H2 1
+  H1 H2 1.63
+end distances
+
+ 
+   

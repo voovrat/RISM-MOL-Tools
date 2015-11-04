@@ -1,0 +1,19 @@
+#!/bin/bash
+
+output=calculateCentralRDF
+echo NArgs: $#
+echo 1stArg:[$1]
+[ $# -eq 1 ]&& output=$1;
+
+echo output=$output
+
+SP=$'\n'
+SP2="$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP"
+
+./genRequireList calculateCentralRDF.cpp > calculateCentralRDF_require.cpp
+echo "$SP2"
+
+cmd="g++ -g -o $output calculateCentralRDF_require.cpp lapack_LINUX.a blas_LINUX.a libfftw3.a -lm -lgfortran"
+echo $cmd
+eval $cmd
+

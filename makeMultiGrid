@@ -1,0 +1,12 @@
+#!/bin/bash
+
+output=multiGridMain
+[ $# -gt 0 ]&& output=$1;
+
+./genRequireList multiGridMain.cpp > multiGridMain_require.cpp
+
+SP=$'\n'
+SP2="$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP$SP"
+echo g++ -g -o $output  multiGridMain_require.cpp lapack_LINUX.a blas_LINUX.a libfftw3.a -lm -lgfortran -rdynamic
+echo "$SP2"; g++ -g -o $output  multiGridMain_require.cpp lapack_LINUX.a blas_LINUX.a libfftw3.a -lm -lgfortran -rdynamic
+ 2>&1 | head -n 40 

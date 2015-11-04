@@ -1,0 +1,305 @@
+<!DOCTYPE html> 
+
+
+
+
+<html>
+  
+     <head> 
+       <style type="text/css"> 
+body { 
+ background-color:#C2FFC2;
+ margin-left: 15% ;
+ margin-right: 15%;
+ border:1px dotted blue;
+ padding:10px 10px 10px 10px;
+ font-family: sans-serif;
+} 
+ 
+
+div.img {
+    margin: 10px;
+    padding: 10px;
+    border: 5px ridge #009933;
+    height: auto;
+    width: auto;
+    float: left;
+    text-align: center;
+}
+
+div.img img {
+    display: inline;
+    margin: 10px;
+    border: 5px dotted #66C285;
+}
+
+div.img a:hover img {
+    border:5px ridge #009933;
+}
+
+div.desc {
+    text-align: center;
+    font-weight: normal;
+    width: 120px;
+    margin: 10px;
+}
+
+
+img {
+    opacity: 0.8;
+    filter: alpha(opacity=40); 
+    }
+
+img:hover 
+    {
+    opacity: 2.5;
+    filter: alpha(opacity=100); 
+    }
+
+
+       </style>
+    </head>
+
+
+
+
+<body>
+
+ <h2> &#9673; RISM-MOL-Tools</h2>
+
+<div class="img">
+  <a target="_blank" href="../RISM-MOL-Tools/rismff_logo.png">
+    <img src="rismff_logo.png" alt="rismff" width="120" height="100">
+  </a>
+  <div class="desc"> RISM-FF </div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="../RISM-MOL-Tools/RISM-MOL-3D-logo.png">
+    <img src="RISM-MOL-3D-logo.png" alt="RISM-MOL-3D" width="120" height="100">
+  </a>
+  <div class="desc">RISM-MOL-3D</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="../RISM-MOL-Tools/rism-vmol-logo.png">
+    <img src="rism-vmol-logo.png" alt="rism-vmol" width="120" height="100">
+  </a>
+  <div class="desc"> RISM-VMOL</div>
+</div>
+
+
+<!-- <img src="../RISM-MOL-Tools/rismff_logo.png" 
+          width="200 px">
+ <img src="../RISM-MOL-Tools/RISM-MOL-3D-logo.png" 
+          width="180 px">
+ <img src="../RISM-MOL-Tools/rism-vmol-logo.png" 
+          width="165 px"> -->
+
+<p>
+  <strong>
+   RISM-MOL-Tools include:
+  </strong>
+</p>
+
+ <ul>
+     <div style="color:#000066"> 
+  <li>
+     RISM-MOL-3D (3DRISM package)
+  </li>
+
+  <li>
+     RISM-MOL-FF (package to assign force-fields) 
+  </li>
+
+  <li>
+     RISM-VMol (package for visualizing the binding sites)
+  </li>
+ 
+  <li>
+     other useful tools, like createSlv, createOmega, 3DtoDX etc.
+  </li>
+
+  <li>
+     VMD RISM-MOL plugin 
+  </li>
+     </div>
+</ul>
+
+
+ <p>
+ <strong> How to install: </strong> 
+ </p>
+   <ol> 
+     <li>
+       Dowload
+     </li>
+          <p>
+            <a href="../RISM-MOL-Tools/rism-mol-tools_2012_10_25.tar.gz"> rism-mol-tools_2012_10_25.tar.gz </a>
+          </p>
+
+          <p> 
+           <em>
+          <strike> File Details:</strike> <br>
+          Filename: rism-mol-tools_2012_10_25.tar.gz <br>
+          Size: 9.26 MB <br>
+          Type: GZIP Archive (application/x-gzip) <br>
+            </em>
+          </p> 
+
+      <li>
+       Unpack <br>
+       tar -xzf rism-mol-tools_2012_10_25.tar.gz
+      </li>
+         <p>
+          <li> 
+           Go to the installation directory <br>
+           cd rism-mol-tools_2012_10_25
+          </li>
+          </p>
+
+       <p>
+        <li>
+        Compile fftw and lapack libraries <br> (it can take some time. If you already have lapack & fftw:just put them to libfftw3.a    and   lapack_LINUX.a files in the rism-mol-tools folder) <br>
+         <p>
+         ./makeFFTW <br>
+         ./makeLAPACK <br>
+         </p>
+         </li>
+        </p>
+
+           <p>
+         <li> 
+          Compile the RISM-MOL-Tools <br>
+          ./makeAll
+         </li>
+            </p>
+
+         
+          <li>Setup paths <br>
+              <p>
+              export PATH=$PATH:$(pwd) <br>
+              echo 'export PATH=$PATH:'$(pwd) >> ~/.bashrc <br>
+              </p>
+          </li>
+         
+ 
+      <p>
+       <strong> <strike> (NOTE:</strike> these lines are only for bash) </strong>
+      </p>
+           
+       <li>
+          Install vmd plugin <br> (you can get VMD at <a href="http://www.ks.uiuc.edu/Research/vmd/"> http://www.ks.uiuc.edu/Research/vmd/ </a>)
+         <p>
+          ./installVmdPlugin
+         </p>
+       </li>
+
+    </ol>
+
+
+<dl>
+ <p> <strong> How to use VMD plugin: </strong> </p>
+</dl>
+
+  <dt> To test the vmd plugin:</dt>
+    <div style="color:#000066"> 
+      <p>
+       <dd> 1. In the installation folder run vmd </dd>
+       <dd> 2. In the main menu select Extentions->RISM-MOL-Tools->binding </dd>
+       <dd> 3. Fill the fields. If you are in the installation folder - you can leave all the fields untouched </dd>
+      </p>
+     </div>
+
+       <dl>The fields:</dl>
+           <dt>-Solute Coordinates: the solute coordinate file in *xyz or *pdb format. </dt>
+             <dt> <p> -Solute ForceField: force-field for the solute if *ff format.</p> </dt> 
+                <div style="color:#000066"> 
+                   <dd> <p> <em> The standard force field oplsaa.ff is distributed with rism-mol-tools, however it still includes only a few molecule types. <br> You can extend the force-field if you need <br> (see instructions inside the oplsaa.ff file) </em> </p> </dd> 
+                </div>
+
+              <dt>-Solvent composition: file which describes the solvent.</dt>
+                   <div style="color:#000066"> 
+                    <dd> <p> <em> Each line coresponds to one solvent component.<br>
+                         The first column is the name of xyz or pdb structure file.<br>
+                         The second column is the name of ff force-field file. </em> </p> </dd>
+                   </div>
+
+                       <dt>-Solvent RDFs: is the file which contains the RDFs of the solvent.</dt>
+                         <div style="color:#000066"> 
+                           <dd> <p> <em> With rism-mol-tools only the waterRDFs.txt is distributed - the RDFs for water molecule. <br>
+                                 The RDFs for outer solvents can be calculated using the AmberTools rism1d.<br>
+                                 3DRISM parameters: parameters for the 3DRISM calculations.<br>
+                                 The standard file is parameters_fast.txt.<br>
+                                 For more details see the documentation to RISM-MOL-3D program. </em> </p> </dd>
+                          </div>
+
+       <dt> 4. Push the button "Run 3DRISM". Wait 3-5 min.</dt>
+           <div style="color:#000066"> 
+                      <dd> <p> <em> After the 3DRISM calculations are finished, the *distr files for each solvent component will be created.<br>
+                      These files contain the names of 3d distributions for each solvent component.<br>
+                      Select in the field "Distributions" one of these files, select the threshold to show binding molecules, and run  "show binding molecules." </em> </p> </dd>
+           </div>
+
+            <dt> 5. Push the buttom "show Binding molecules". Wait 2-3 min.</dt>
+               <div style="color:#000066"> 
+                   <dd> <p> <em> the picture like this will appear in the VMD OpenGL window. </em> </p> </dd>  
+               </div>
+
+
+
+     <center> <img src="../RISM-MOL-Tools/CD_binding.png" CD_binding.png> </center>
+
+
+
+<dt> 6. If you cannot or do not want to use the VMD, you can simply run the shell commands: </dt>
+    
+         <dd> <p> run3DRISM solute.xyz solute.ff solvent.composition solvent.rdfs parameters.txt </p>
+              <p> runBinding distribution.distr threshold solvent.composition </p> 
+         </dd>
+    
+
+
+
+<div style="color:#000066"> 
+  <center>
+      <p> 
+        <em>  
+           (#this is actually what VMD plugins do)
+        </em> 
+     </p>
+  </center>
+</div>
+
+
+
+ <dt> <strong> Example: </strong> </dt>
+
+        <dd> <p> run3DRISM CD.xyz oplsaa.ff water.composition waterRDFs.txt parameters_fast.txt </p>
+             <p> runBinding CD_in_water_water.distr 2 water.composition </p>
+
+   <dt> The following openable files whill be created:</dt>
+        <dd> <p> CD_in_water_water_Gmax.dx - 3d water distribution </p>
+             <p> CD_in_water_water_binding.xyz - the file with binding water molecules </p>
+        </dd>
+          
+
+
+
+  
+
+
+
+
+
+    <center>   
+        <p>   
+           <a href="http://compchemmpi.wikispaces.com/RISM-MOL-Tools" target="_parent"> <em> Visit the page on wikispaces.org </em> </a>
+        </p>
+   </center>
+
+
+</body> 
+
+
+</html>

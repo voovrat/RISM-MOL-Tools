@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+	echo "Usage runBinding  distribution.distr threshold solvent.composition "
+	exit
+fi
+
+solventPath=$( echo $3 | tr '/' $'\n' | head -n-1 | tr $'\n' / )
+
+#[ -z "$solventPath" ]&& solventPath=.;
+
+echo solventPath: $solventPath
+
+
+distributions=$1
+threshold=$2
+solute=$(echo $1 | gawk -F '/' '{print $NF}' | gawk -F '_' '{print $1}' )
+solvent=$(echo $1 | gawk -F '/' '{print $NF}' | gawk -F '_' '{print $3}' )
+component=$(echo $1 | gawk -F '/' '{print $NF}' | gawk -F '_' '{print $4}' | gawk -F '.' '{print $1}' )
+
+componentFile=$component.xyz
+
+[ -f $solventPath$componentFile ]|| componentFile=$component.pdb;
+
+gridPrefix=${solute}_in_${solvent}
+gmaxPrefix=${solute}_in_${solvent}_${component}
+
+getBestRotationsFast ${solventPath}$componentFile $distributions $gridPrefix $gmaxPrefix $threshold
+
+outputFile=${gmaxPrefix}_binding.xyz 
+echo $outputFile > binding.out
+
+
+createBindingMoleculesXYZ ${solventPath}$componentFile $gridPrefix $gmaxPrefix $threshold > $outputFile
+
+outGmax=${gmaxPrefix}_Gmax.dx
+
+3DtoDX $gridPrefix ${gmaxPrefix}_Gmax.3d $outGmax
+
+echo $outGmax > gmax.out
+

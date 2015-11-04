@@ -1,0 +1,182 @@
+
+N = 4096;
+dr = 0.05 [Bohr];
+
+#SYSTEM
+
+densities = {
+   water : 0.0332891 [Angstr^-3],
+   NaCl  : 0.005 [Angstr^-3]
+}; 
+
+
+#Temperature of the solvent
+temp = 298.15 [ K ]; # do not forget to put [K] after the value!!! (otherwise temperature is in hartree)
+
+sites = { 
+  O  : water,
+  H1 : water,
+  H2 : water,
+  Na : NaCl,
+  Cl : NaCl
+}; # 
+
+distances = {
+   (O,H1)  : 1 [Angstr],
+   (O,H2)  : 1 [Angstr],
+   (H1,H2) : 1.63 [Angstr]
+}; # don't forget to put 'Angstr' after the values (otherwise -> Bohr)
+
+sigma = {
+  O  : 3.1655 [Angstr],
+  H1 : 1 [Angstr],
+  H2 : 1 [Angstr],
+  Na : 2.592 [Angstr],
+  Cl : 4.401 [Angstr] 
+};
+
+epsilon = {
+  O  : 0.1554 [ kcal/mol],
+  H1 : 0.046 [kcal/mol],
+  H2 : 0.046 [kcal/mol],
+  Na : 0.10361 [ kcal/mol],
+  Cl : 0.10361 [ kcal/mol]
+}; # don't forget to put 'kcal/mol' after the values (otherwise Hartree);
+
+charge =  {
+ O  : -0.8476,
+ H1 : 0.4238,
+ H2 : 0.4238,
+ Na : 1,
+ Cl : -1
+};
+
+
+# mixing rules. Valid Values are 'LornentzBerthelot' and 'OPLSAA'
+# LorentzBerthelot means sigma12 = (sigma1+sigma2)/2, epsilon12=sqrt(epsilon1*epsilon2)
+#OPLSAA means sigma12=sqrt(sigma1*sigma2); epsilon12=sqrt(epsilon1*epsilon2);
+MixingRules = 'LorentzBerthelot';
+
+# Mixing coefficient for ng-procedure (multiplier of the argument of erf function ).
+# Determines, how smooth is the transition from the short-range to thelong-range function (the smaller - the smoother).
+ngCoeff = 0.5 [Bohr^-1];
+
+
+# closure. Valid values are 'HNC' and 'KH'
+closure = 'HNC'; # again: let's try with HNC first, and do everything else afterwards
+
+#### 
+
+#### ITERATION
+
+# initial lambda coupling parameter 
+lambda = 0.5;
+
+# norm which is used to control convergence of the iterations
+# Valid values are: 'L2' and 'HNC'
+norm = 'HNC';
+
+# tolerance which is used to stop the iterations.
+# iteratins stop, then norm (see decayFcator) is less than tolerance
+# value of tolrance depeds on the norm used and on the decay factor
+tolerance = 0.001 [kcal/mol];
+
+MaxStep = 10000;
+
+# decayFactor regulates, who often we calculate the norm.
+# let x[i] are the solutions, and n is the smallest natural, such, that
+# |x[n]-x[n+1]| < |x[0]-x[1]|/ DecayFactor
+# then the norm is calculated as |x[n]-x[0]|  
+# ( this allows to calculate norm more precicely, because |x[n]-x[0]| is a better 
+# approximation to |x*-x[0]|, than |x[n]-x[n+1]|
+#DecayFactor=100;
+decayFactor = 10;
+
+
+#
+# FOR A TIME BEEING : JUST TRY TO GO WITH PICARD
+# if everything ok - will try (M)DIIS
+# if it works, but is slow --> will think on multi-grid
+
+# Nested iterations
+#Nested = "no";
+#NestedTolerance = 2 [kcal/mol];
+#NestedMaxCoarseStepCount = 100;
+
+
+#iteration. valid values: 'Picard' or 'DIIS' 'MDIIS' (case sencentive)
+#iiteration = 'MDIIS';
+
+#Number of DIIS vectors (only usedm then iteration='DIIS')
+#NDIIS = 5;
+
+#damping of MDIIS iterations
+#  x' = (1 - preDamping) * x[n] +  preDamping * sum(alpha[i]*x[i])
+# x[n+1] = (1 - postDamping) * x' + postDamping * F[x']
+#diisPreDamping = 1;
+#diisPostDamping = 0.3;
+
+# Should we use multi grid? Valid values: 'yes' or 'no'
+#iMultiGrid = 'yes';
+
+#if yes, what is the multi grid depth?
+# (depth means, who much times the number of grid points will be fivided by two.
+# e.g. for the initial grid  128x128x128 with dx=dy=dz=0.1 [Angstr] and depth=2 
+# the coarse grid is 64x64x64 with dx=dy=dz=0.4 [Angstr]
+#depth = 3;
+
+# Number of extentions.
+# After the main cycle of iteration converge, the solutions will be prolongated 
+# to the larger grid, and iterations repeat.
+# this parameters regulates the number of extentions.
+# e.g. for initial grid 128x128x128 with dx=dy=dz=0.1[Angstr] and number of extentions =2
+#  the resultin grid is 512x512x512 with dx=dy=dz=0
+#NumberOfExtentions = 2;
+
+# Number Of pre smooting steps in multi-grid iteration
+#NumberOfPreSmoothingSteps = 5; # DO NOT CHANGE 
+
+#Number of post smoothing 
+#NumberOfPostSmoothingSteps =0; # DO NOT CHANGE
+
+#NumberOfMultiGridSubSteps. 1 - V iteration 2- W iteration
+#NumberOfMultiGridSubSteps = 1; # DO NOT CHANGE
+
+# if after fine-grid correction next coarse error is less than before correction, that means that not enough
+# steps was done ( error of grid correction is < than coarse error).
+# The decay factor will be multiplied by DecayFactorMultiplier, and thus number of coarse iteration steps increase
+#DecayFactorMultiplier = 1.2;
+
+# if after fine-grid correction next coarse error is more than before correction, that means that too much
+# steps was done ( error of grid correction is > than coarse error).
+# The decay factor will be divided by DecayFactorMultiplier, and thus number of coarse iteration steps decrease
+#DecayFactorDivider = 2;
+
+#Minimal and maximal limits for decayFactor
+#MinDecayFactor = 1.1;
+#MinDecayFactor = 10;
+#MaxDecayFactor = 100;
+
+
+##### DIVERGENCE
+
+#growFactor controls the condition to detect the divergence of iterations
+# when the norm of difference between sequential solutions grows more than 
+# by growFactor times, the iteration is supposed to diverge.
+#growFactor = 100;
+
+# first grow factor shows, how much times should the error grow to start divergence check (RealNormCondition::stateDiverge)
+#firstGrowFactor = 1;
+#FirstGrowFactor = 1e9;
+
+# divergenceLambdaDecayFactor. 
+# when the iteration diverge, the value of lambda is decreasing by divergenceLambdaDecayFactor, and iteration steps are continued with the new lambda
+#divergenceLambdaDecayFactor = 10;
+
+# Not more than MaxCoarseStepCount coarse grid steps is allowed on the coarse grid
+#MaxCoarseStepCount = 1000;
+
+# If coarse grid norm reaches MinCoarseError, iteration steps stop
+#MinCoarseError = 1e-13;
+
+

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+dat=$(date +%Y_%m_%d)
+
+releaseDir=rism-mol3d_${dat}
+
+mkdir ${releaseDir} 
+
+#l=$(ls *.c *.cpp *.h)
+
+./genRequireList multiGridMain.cpp
+cat dependencies.txt > TMP
+
+./genRequireList calculateFreeEnergySimple
+cat dependencies.txt >> TMP
+
+cat TMP | sort -u > FileList.txt
+
+
+l=$(cat FileList.txt)
+for file in $l 
+do
+	dstFile=${releaseDir}/$file
+
+	touch $dstFile
+
+	echo '/*' > $dstFile
+	cat licence.txt >> $dstFile
+	echo '*/' >> $dstFile
+	cat $file >> $dstFile
+
+done
+
+cp  water.slv waterRDFs.txt waterOmega.txt parameters.txt ${releaseDir}
+
+cp -u genRequireList extractIncludes myMake makeAll ${releaseDir}
+
+tar -cf ${releaseDir}.tar ${releaseDir}
+gzip ${releaseDir}.tar
+

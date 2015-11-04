@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# make all theprograms to assign the force field: 
+# coors2pat
+# assignAtomTypes
+# createRismInput
+
+echo ' **** making coors2pat **** '
+./myMake coors2pat.cpp
+
+echo ' **** making assignAtomType ****  '
+./myMake assignAtomTypes.cpp
+
+echo ' **** making createRismInput **** '
+./myMake createRismInput.cpp

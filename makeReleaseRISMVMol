@@ -1,0 +1,48 @@
+#!/bin/bash
+
+dat=$(date +%Y_%m_%d)
+
+releaseDir=rism-vmol_${dat}
+
+mkdir ${releaseDir} 
+
+#l=$(ls *.c *.cpp *.h)
+
+./genRequireList getBestRotationsFast.cpp
+cat dependencies.txt > TMP
+
+./genRequireList createBindingMoleculesXYZ.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList 3DtoDX.cpp
+cat dependencies.txt >> TMP
+
+cat TMP | sort -u > filelist.txt
+l=$(cat filelist.txt)
+
+for file in $l 
+do
+	dstFile=${releaseDir}/$file
+
+	touch $dstFile
+
+	echo '/*' > $dstFile
+	cat licence.txt >> $dstFile
+	echo '*/' >> $dstFile
+	cat $file >> $dstFile
+
+done
+
+#cp sigmas.dat ffopls.pat ffoplsaanb.itp ${releaseDir}
+
+cp -u genRequireList extractIncludes myMake makeFFTW makeAll makeBestRotationsFast ${releaseDir}
+#cp neopentane.pdb ${releaseDir}  # as an example
+#cp libfftw3.a ${releaseDir}
+rm -Rf fftw-3.3alpha1
+tar -xzf fftw-3.3alpha1.tar.gz
+cp -R fftw-3.3alpha1 ${releaseDir}
+cp water.xyz CD.xyz CD_in_water_X.grd CD_in_water_Y.grd CD_in_water_Z.grd CD_in_water_g0.3d CD_in_water_g1.3d distributions.txt ${releaseDir} #example
+
+tar -cf ${releaseDir}.tar ${releaseDir}
+gzip ${releaseDir}.tar
+

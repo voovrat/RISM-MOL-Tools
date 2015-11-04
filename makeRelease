@@ -1,0 +1,101 @@
+#!/bin/bash
+
+dat=$(date +%Y_%m_%d)
+
+releaseDir=rism-mol-tools_${dat}
+
+mkdir ${releaseDir} 
+
+#l=$(ls *.c *.cpp *.h)
+
+./genRequireList multiGridMain.cpp
+cat dependencies.txt > TMP
+
+./genRequireList calculateFreeEnergySimple.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList getBestRotationsFast.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList createBindingMoleculesXYZ.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList 3DtoDX.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList coors2pat.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList assignAtomTypes.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList createRismInput.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList createSlv.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList createOmega.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList createDistributions.cpp
+cat dependencies.txt >> TMP 
+
+./genRequireList calculateCentralRDF.cpp
+cat dependencies.txt >> TMP
+
+./genRequireList centrateMolecule.cpp
+cat dependencies.txt >> TMP
+
+cat TMP | sort -u > FileList.txt
+
+
+l=$(cat FileList.txt)
+for file in $l 
+do
+	dstFile=${releaseDir}/$file
+
+	touch $dstFile
+
+	echo '/*' > $dstFile
+	cat licence.txt >> $dstFile
+	echo '*/' >> $dstFile
+	cat $file >> $dstFile
+
+done
+
+cp -u water.composition ${releaseDir}
+cp -u assignSolventFF ${releaseDir}
+
+cp -u waterOmega.txt ${releaseDir}
+cp -u water.slv ${releaseDir}
+
+cp -u parameters.txt ${releaseDir}
+
+
+cp -u run3DRISM runBinding ${releaseDir}
+
+#cp  -u water.slv waterRDFs.txt waterOmega.txt parameters.txt parameters_fast.txt ${releaseDir}
+
+cp -u parameters_fast.txt waterRDFs.txt ${releaseDir}
+
+cp -u sigmas.dat  oplsaa.ff Aqvist.ff SPCE.ff opls_ions.ff ${releaseDir}
+cp -u CD.xyz neopentane.pdb ${releaseDir}
+cp -u water.xyz ${releaseDir}
+
+#cp -u water.xyz CD.xyz CD_in_water_X.grd CD_in_water_Y.grd CD_in_water_Z.grd CD_in_water_g0.3d CD_in_water_g1.3d distributions.txt ${releaseDir} #example
+
+cp -u genRequireList extractIncludes myMake makeFFTW makeLAPACK makeAllFF makeAllRISMVMol makeBestRotationsFast makeMultiGrid makeFreeEnergySimple makeAll ${releaseDir}
+#cp neopentane.pdb ${releaseDir}  # as an example
+#cp libfftw3.a ${releaseDir}
+#rm -Rf fftw-3.3alpha1
+#tar -xzf fftw-3.3alpha1.tar.gz
+cp -R lapack ${releaseDir}
+cp -R fftw-3.3alpha1 ${releaseDir}
+cp -R binding ${releaseDir}
+
+cp -u installVmdPlugin ${releaseDir}
+
+tar -cf ${releaseDir}.tar ${releaseDir}
+gzip ${releaseDir}.tar
+

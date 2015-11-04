@@ -1,0 +1,238 @@
+#####  GRID
+
+# number of grid points on INITIAL fine grid in x,y,z directions.
+#Nx = 128 ; 
+#Ny = 128 ; 
+#Nz =128;
+
+# grid sizes of initial grid in x,y,and z directions
+#dx = 0.1 [Angstr];
+#dy = 0.1 [Angstr]; 
+#dz = 0.1 [Angstr];
+
+
+Buffer = 5 [Angstr];
+spacing = 0.5 [Angstr];
+
+#### ITERATION
+
+#iteration. valid values: 'Picard' or 'DIIS' (case sencentive)
+iteration = 'MDIIS';
+
+#Number of DIIS vectors (only usedm then iteration='DIIS')
+NDIIS = 5;
+
+#damping of MDIIS iterations
+#  x' = (1 - preDamping) * x[n] +  preDamping * sum(alpha[i]*x[i])
+# x[n+1] = (1 - postDamping) * x' + postDamping * F[x']
+diisPreDamping = 1;
+diisPostDamping = 0.3;
+
+# Should we use multi grid? Valid values: 'yes' or 'no'
+MultiGrid = 'no';
+
+#if yes, what is the multi grid depth?
+# (depth means, who much times the number of grid points will be fivided by two.
+# e.g. for the initial grid  128x128x128 with dx=dy=dz=0.1 [Angstr] and depth=2 
+# the coarse grid is 64x64x64 with dx=dy=dz=0.4 [Angstr]
+depth = 1;
+
+# Number of extentions.
+# After the main cycle of iteration converge, the solutions will be prolongated 
+# to the larger grid, and iterations repeat.
+# this parameters regulates the number of extentions.
+# e.g. for initial grid 128x128x128 with dx=dy=dz=0.1[Angstr] and number of extentions =2
+#  the resultin grid is 512x512x512 with dx=dy=dz=0
+NumberOfExtentions = 0;
+
+# Number Of pre smooting steps in multi-grid iteration
+NumberOfPreSmoothingSteps = 5; # DO NOT CHANGE 
+
+#Number of post smoothing 
+NumberOfPostSmoothingSteps =0; # DO NOT CHANGE
+
+#NumberOfMultiGridSubSteps. 1 - V iteration 2- W iteration
+NumberOfMultiGridSubSteps = 1; # DO NOT CHANGE
+
+# initial lambda coupling parameter 
+lambda = 0.5;
+
+# norm which is used to control convergence of the iterations
+# Valid values are: 'L2' and 'HNC'
+norm = 'HNC';
+
+# decayFactor regulates, who often we calculate the norm.
+# let x[i] are the solutions, and n is the smallest natural, such, that
+# |x[n]-x[n+1]| < |x[0]-x[1]|/ DecayFactor
+# then the norm is calculated as |x[n]-x[0]|  
+# ( this allows to calculate norm more precicely, because |x[n]-x[0]| is a better 
+# approximation to |x*-x[0]|, than |x[n]-x[n+1]|
+DecayFactor=100;
+#decayFactor = 10;
+
+# if after fine-grid correction next coarse error is less than before correction, that means that not enough
+# steps was done ( error of grid correction is < than coarse error).
+# The decay factor will be multiplied by DecayFactorMultiplier, and thus number of coarse iteration steps increase
+DecayFactorMultiplier = 1.2;
+
+# if after fine-grid correction next coarse error is more than before correction, that means that too much
+# steps was done ( error of grid correction is > than coarse error).
+# The decay factor will be divided by DecayFactorMultiplier, and thus number of coarse iteration steps decrease
+DecayFactorDivider = 2;
+
+#Minimal and maximal limits for decayFactor
+#MinDecayFactor = 1.1;
+MinDecayFactor = 10;
+MaxDecayFactor = 100;
+
+
+# tolerance which is used to stop the iterations.
+# iteratins stop, then norm (see decayFcator) is less than tolerance
+# value of tolrance depeds on the norm used and on the decay factor
+tolerance = 0.1 [kcal/mol];
+
+###### DIVERGENCE
+
+#growFactor controls the condition to detect the divergence of iterations
+# when the norm of difference between sequential solutions grows more than 
+# by growFactor times, the iteration is supposed to diverge.
+growFactor = 100;
+
+# first grow factor shows, how much times should the error grow to start divergence check (RealNormCondition::stateDiverge)
+#firstGrowFactor = 1;
+FirstGrowFactor = 1e9;
+
+# divergenceLambdaDecayFactor. 
+# when the iteration diverge, the value of lambda is decreasing by divergenceLambdaDecayFactor, and iteration steps are continued with the new lambda
+divergenceLambdaDecayFactor = 10;
+
+# Not more than MaxCoarseStepCount coarse grid steps is allowed on the coarse grid
+MaxCoarseStepCount = 1000;
+
+# If coarse grid norm reaches MinCoarseError, iteration steps stop
+MinCoarseError = 1e-13;
+
+
+
+######### SOLUTE
+
+# SoluteStructureFile describes the structure of the solute. 
+# it contain 6 columns (each line corresponds to one atom):
+# X,Y,Z,sigma,epsilon,charge
+# X,Y,Z are coordinates of atoms
+# sigma and epsilon are lennard-jones parameters
+# charge is a partial charge of atom
+SoluteStructureFile = "Ar.rism";
+
+#Distance units, which are used in SoluteStructureFile for X,Y,Z and sigma
+SoluteDistanceUnits = "Angstr";
+
+#Energy units, which are used in SoluteStructureFile for epsilon
+SoluteEnergyUnits = "kcal/mol";
+
+######## SOLVENT
+
+# SolventDataFile describes the solvent atoms
+# it contains 5 columns (each line corresponds to one atom):
+# sigma, epsilon, charge, multiplicity, density
+# sigma and epsilon are Lennad-Jones parameters
+# charge is a partial charge of atom
+# multiplicity defines, how many identical sites are there in the solvent molecule
+# density defines the density of each of sites 
+SolventDataFile = "water.slv";
+
+#Distance units, which are used in SolventDataFile for sigma
+SolventDistanceUnits = "Angstr";
+
+#Energy units, which are used in SolventDataFile for epsilon
+SoventEnergyUnits = "kcal/mol";
+
+#File, which contains bulk-solvent radial distribution functions 
+#Structure of file: 
+# 1st column - regular grid in R direction
+# next N * (N+1)/2 columns - samples of RDF functions
+# where N is number of unique solvent sites
+# order is g11 g12 ... g1N g22... g2N g33 ... gNN
+# where gIJ means RDF between I-th and J-th solvent sites
+SolventRDFsFile = "waterRDFs.txt";
+
+#Distance units, which are used for the first column in SolventRDFsFile
+SolventRDFsUnits = "Bohr";
+
+#File, which describes the omega functions of different sites
+# each line corresponds to one omega function
+# The file contain 3 columns: 
+# RDFnumber, omega_koefficient, omega_shift 
+# RDFnumber describes the number of RDF to which the omega function corresponds
+# where RDFs are numbered in the following order:
+# 0 - g11, 
+# 1 - g12,
+#  ...
+# N-1 - g1N
+#  N - g22
+# N+1 - g23
+# ...
+# 2N-2 - g2N
+# 2N-1 - g33
+# ...
+# N(N-1)/2 - gNN
+# 
+# where N is number of unique solvent sites,
+# gIJ means RDF between sites I and J
+#
+# the resulting omega function will be pre-multiplied by the omega_koefficient
+#
+# omega_shift defines the position of the delta sphere
+#
+# Thus, result is omega_koefficient*delta(|r-omega_shift|)
+SolventOmegaFile = "waterOmega.txt";
+
+# Distance units used in the SolventOmegaFile
+OmegaDistanceUnits = "Angstr";
+
+#Units which are used for the density (the last column) in the solventDayaFile
+SolventDensityDistanceUnits = "nm";
+
+#Temperature of the solvent
+T = 300 [ K ]; # do not forget to put [K] after the value!!!
+
+####### POTENTIALS AND CLOSURE
+
+# closure. Valid values are 'HNC' and 'KH'
+closure = 'KH';
+
+# mixing rules. Valid Values are 'LornentzBerthelot' and 'OPLSAA'
+# LorentzBerthelot means sigma12 = (sigma1+sigma2)/2, epsilon12=sqrt(epsilon1*epsilon2)
+#OPLSAA means sigma12=sqrt(sigma1*sigma2); epsilon12=sqrt(epsilon1*epsilon2);
+MixingRules = 'LorentzBerthelot';
+
+# Mixing coefficient for ng-procedure (multiplier of the argument of erf function ).
+# Determines, how smooth is the transition from the short-range to thelong-range function (the smaller - the smoother).
+ngCoeff = 0.5;
+
+
+
+# Output energy units (for Free Energy file)
+OutputEnergyUnits = 'kcal/mol';
+
+
+# Use Hard Cores???
+HardCores = "no";
+
+# HardCoreRadiiFile
+HardCoreRadiiFile = "Ar.radii";
+
+# Bridge
+
+#ExponentBridge = "yes"; # B = -exp(a(r-r0)+Csigma_11/sigma_22 )
+#ExponentBridgeA = 30 [nm^-1];
+#ExponentBridgeC = 1.1754;
+
+# Nested iterations
+Nested = "no";
+#NestedTolerance = 2 [kcal/mol];
+#NestedMaxCoarseStepCount = 100;
+
+
+LJPotentialCutoff = 8[Angstr];
+LJCorrection="yes";

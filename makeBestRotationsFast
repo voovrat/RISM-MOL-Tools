@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for ((i=0;i<10;i++)); do echo ; done
+
+rm -f *.o
+./genRequireList getBestRotationsFast.cpp > getBestRotationsFast_require.cpp
+g++ -g -o getBestRotationsFast getBestRotationsFast_require.cpp libfftw3.a -lm
+
+
+
