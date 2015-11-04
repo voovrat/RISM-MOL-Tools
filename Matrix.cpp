@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include "Exception.h"
 
 template<class T>
 void Matrix<T>::toRowArray(T *array)
@@ -87,7 +88,7 @@ void Matrix<T>::opname(Matrix<T> *B,Matrix<T> *Result) \
         throw new Exception(this,"Matrix." #opname ": incorrect number of rows/columns in matrices!");      \
   int i,j;                  \
   for(i=0;i<m;i++)          \
-  for(j=0;j<k;j++)          \
+  for(j=0;j<n;j++)          \
        Result->setAt(i,j, opcode ); \
 }
 
@@ -104,13 +105,13 @@ void Matrix<T>::opname(Matrix<T> *A) \
         throw new Exception(this,"Matrix." #opname ": incorrect number of rows/columns in matrices!");      \
   int i,j;                  \
   for(i=0;i<m;i++)          \
-  for(j=0;j<k;j++)          \
+  for(j=0;j<n;j++)          \
         opcode;             \
 }
 
 
 Matrix_monop(copyFrom, this->setAt(i,j, A->getAt(i,j) ) )
-Matrix_monop(copyTo, A-setAt(i,j, this->getAt(i,j) ) )
+Matrix_monop(copyTo, A->setAt(i,j, this->getAt(i,j) ) )
 
 
 template<class T>                   
@@ -122,22 +123,7 @@ void Matrix<T>::mulScalar(T scale, Matrix<T> *Result)
         throw new Exception(this,"Matrix.mulScalar : incorrect number of rows/columns in matrices!");      
   int i,j;                  
   for(i=0;i<m;i++)          
-  for(j=0;j<k;j++)          
+  for(j=0;j<n;j++)          
         Result->setAt(i,j, scale * this->getAt(i,j) );
 }
-
-
-        virtual void copyFrom(Matrix<T> *src);
-        virtual void copyTo(Matrix<T> *dst); 
-
-        virtual void mul(Matrix<T> *B,Matrix<T> *Result); // Result = this * B
-        virtual void mulScalar(T scalar, Matrix<T> *Result);
-
-        virtual void add(Matrix<T> *B,Matrix<T> *Result); // Result = this + B
-        virtual void add(Matrix<T> *B) {add(B,this);} // this +=B
-
-        virtual void sub(Matrix<T> *B,Matrix<T> *Result); // Result = this + B
-        virtual void sub(Matrix<T> *B) {sub(B,this);} // this -=B
-
-
  
