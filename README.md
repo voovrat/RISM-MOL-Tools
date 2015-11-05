@@ -74,7 +74,9 @@ How to install:
     command line:
  
     multiGridMain parameters_fast.txt 'SoluteStructureFile="file.rism";' 
-    calculate solvation free energy
+
+4   calculate solvation free energy
+
     calculateFreeEnergySimple file_in_water_
 
 
@@ -86,6 +88,34 @@ NOTE: if you want to run 3DRISM form other folder, you will need:
 
     SolventOmegaFile="(full path to your RISM-MOL-Tools instalation)/waterOmega.txt";
     SolventRDFsFile="(full path to your RISM-MOL-Tools instalation)/waterRDFs.txt";
+
+IF you want to visualize the 3d-distributions, you can use voovrat-utils for that.
+you will need octave also (in ubuntu  sudo apt-get install octave).
+
+So, to get voovrat-utils -  visit github.com/voovrat/voovrat-utils, and follow the installation instructions.
+
+After that:
+
+run octave and type the following commands:
+
+   g_o = load('file_in_water_g0.3d');  % oxygen distribution
+   g_h = load('file_in_water_g1.3d');  % hydrogen distribution
+   
+   gx = load('file_in_water_X.grd');  % grid
+   gy = load('file_in_water_Y.grd');
+   gz = load('file_in_water_Z.grd');
+    
+   MZ = length(gz)/2;
+    
+   [g3d_o,GX,GY,GZ] = prepareToSlice(g_o,gx,gy,gz,{'z','y','x'});  % convert to the octave 3d-arrays
+   [g3d_h,GX,GY,GZ] = prepareToSlice(g_h,gx,gy,gz,{'z','y','x'});
+   
+   % plot the distributions. Oxygen is left, hydrogen - right
+   
+   imagesc([g3d_o(:,:,MZ) g3d_h(:,:,MZ)])
+   
+   
+
 
 
 ALSO:  Read the documentation in doc.pdf
