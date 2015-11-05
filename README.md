@@ -26,6 +26,7 @@ How to install:
     ./makeLAPACK
 
 3   Compile the RISM-MOL-Tools
+
     ./makeAll
 
 4   Setup paths
@@ -34,50 +35,54 @@ How to install:
     echo 'export PATH=$PATH:'$(pwd) >> ~/.bashrc
 
     (NOTE: these lines are only for bash)
-5   Install vmd plugin
+
+5   Install vmd plugin ( if you are going to use it. 3DRISM works without it, but binding not)
     (you can get VMD at http://www.ks.uiuc.edu/Research/vmd/ )
 
     ./installVmdPlugin
 
 
----------------------------
--- at this point you can perform 3drism calculations 
--- see the documentation 
----------------------
+* ---------------------------
+* -- at this point you can perform 3drism calculations 
+*-- see the documentation 
+* ---------------------
 
-HOW TO CALCULATE Solvation Free Energy:
+** HOW TO CALCULATE Solvation Free Energy:
 
 
 1    Create solvent files
+
     assignSolventFF water.composition > water.rism
     createSlv water.composition water.rism > water.slv
     createOmega water.composition > waterOmega.txt
 
 2    Create solute input
-
-    Simplest example:
+     Simplest example:
 
     echo 0 0 0 3.5 0.15 0 >file.rism
 
     (first 3 columns - coordinates (Angstr), 4th - sigma (Angstr), 5th -epsilon (kcal/mol), 6th - charge (e))
 
+    
     More complicated: if you have pdb or xyz file (for example file.pdb), type
 
     coors2pat file.pdb > file.pat
     assignAtomTypes file.pat oplsaa.ff > file.at
     createRismInput file.pdb file.at oplsaa.ff > file.rism
-    Run 3DRISM
-    multiGridMain parameters_fast.txt 'SoluteStructureFile="file.rism";'
 
+3   Run 3DRISM
+    command line:
+ 
+    multiGridMain parameters_fast.txt 'SoluteStructureFile="file.rism";' 
     calculate solvation free energy
     calculateFreeEnergySimple file_in_water_
 
 
 NOTE: if you want to run 3DRISM form other folder, you will need:
-
-    to copy water.slv to that folder
-    to copy parameters_fast.txt to that folder
-    to modify parameters_fast.txt to put full paths to the files at lines:
+    
+    * to copy water.slv to that folder
+    * to copy parameters_fast.txt to that folder
+    * to modify parameters_fast.txt to put full paths to the files at lines:
 
     SolventOmegaFile="(full path to your RISM-MOL-Tools instalation)/waterOmega.txt";
     SolventRDFsFile="(full path to your RISM-MOL-Tools instalation)/waterRDFs.txt";
