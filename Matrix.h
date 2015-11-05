@@ -23,7 +23,7 @@ public:
         virtual void copyFrom(Matrix<T> *src);
         virtual void copyTo(Matrix<T> *dst); 
 
-        virtual void mul(Matrix<T> *B,Matrix<T> *Result); // Result = this * B
+/*        virtual void mult(Matrix<T> *B,Matrix<T> *Result); // Result = this * B
 
         virtual void mulScalar(T scale, Matrix<T> *Result); // Rsult = this * scale
         virtual void mulScalar(T scale) { mulScalar(scale,this); } // this *= scale
@@ -33,8 +33,27 @@ public:
 
         virtual void sub(Matrix<T> *B,Matrix<T> *Result); // Result = this + B
         virtual void sub(Matrix<T> *B) {sub(B,this);} // this -=B
-
+*/
 
 };
+
+// For matrix of "anything" including pointers for example one cannot do arithmetics! 
+
+template<class T>
+class NumericMatrix : public Matrix<T> {
+
+        virtual void mul(NumericMatrix<T> *B,NumericMatrix<T> *Result); // Result = this * B
+
+        virtual void mulScalar(T scale, NumericMatrix<T> *Result); // Rsult = this * scale
+        virtual void mulScalar(T scale) { mulScalar(scale,this); } // this *= scale
+
+        virtual void add(NumericMatrix<T> *B,NumericMatrix<T> *Result); // Result = this + B
+        virtual void add(NumericMatrix<T> *B) {add(B,this);} // this +=B
+
+        virtual void sub(NumericMatrix<T> *B,NumericMatrix<T> *Result); // Result = this + B
+        virtual void sub(NumericMatrix<T> *B) {sub(B,this);} // this -=B
+};
+
+
 
 #endif

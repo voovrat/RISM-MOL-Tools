@@ -13,7 +13,7 @@
 
 #define INF 1e9
 
-main(Integer argc,char *argv[])
+main(int argc,char *argv[])
 {
 
 
