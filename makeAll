@@ -7,5 +7,5 @@
 ./myMake createSlv.cpp
 ./myMake createOmega.cpp
 ./myMake createDistributions.cpp
-./myMake centrateMolecule
+./myMake centrateMolecule.cpp
 ./makeCentralRDF
