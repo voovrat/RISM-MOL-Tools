@@ -99,15 +99,19 @@ After that:
 run octave and type the following commands:
 
    g_o = load('file_in_water_g0.3d');  % oxygen distribution
+
    g_h = load('file_in_water_g1.3d');  % hydrogen distribution
-   
+
    gx = load('file_in_water_X.grd');  % grid
+
    gy = load('file_in_water_Y.grd');
+
    gz = load('file_in_water_Z.grd');
     
    MZ = length(gz)/2;
     
    [g3d_o,GX,GY,GZ] = prepareToSlice(g_o,gx,gy,gz,{'z','y','x'});  % convert to the octave 3d-arrays
+
    [g3d_h,GX,GY,GZ] = prepareToSlice(g_h,gx,gy,gz,{'z','y','x'});
    
    % plot the distributions. Oxygen is left, hydrogen - right
